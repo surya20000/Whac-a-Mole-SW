@@ -1,5 +1,4 @@
 const squares = document.querySelectorAll(".square");
-const mole = document.querySelector(".mole");
 const timeLeft = document.querySelector("#time-left");
 const score = document.querySelector("#score");
 
@@ -11,18 +10,28 @@ let timerId = null;
 function randomSquare() {
   squares.forEach((square) => {
     square.classList.remove("mole");
+    square.classList.remove("bonus-mole");
   });
 
-  let randomSquare = squares[Math.floor(Math.random() * 9)];
-  randomSquare.classList.add("mole");
+  let randomSquare = squares[Math.floor(Math.random() * squares.length)];
 
-  hitPosition = randomSquare.id;
+  const isBonusMole = Math.random() < 0.2; 
+  if (isBonusMole) {
+    randomSquare.classList.add("bonus-mole");
+  } else {
+    randomSquare.classList.add("mole"); 
+  }
+
+  hitPosition = {
+    id: randomSquare.id,
+    isBonus: isBonusMole,
+  };
 }
 
 squares.forEach((square) => {
   square.addEventListener("mousedown", () => {
-    if (square.id == hitPosition) {
-      result++;
+    if (square.id == hitPosition?.id) {
+      result += hitPosition.isBonus ? 5 : 1;
       score.textContent = result;
       hitPosition = null;
     }
@@ -33,17 +42,16 @@ function moveMole() {
   timerId = setInterval(randomSquare, 500);
 }
 
-moveMole();
-
 function countDown() {
   currentTime--;
   timeLeft.textContent = currentTime;
 
-  if (currentTime == 0) {
+  if (currentTime === 0) {
     clearInterval(countDownTimerId);
     clearInterval(timerId);
     alert("GAME OVER! Your final score is " + result);
   }
 }
 
-let countDownTimerId = setInterval(countDown, 1500);
+let countDownTimerId = setInterval(countDown, 1000);
+moveMole();

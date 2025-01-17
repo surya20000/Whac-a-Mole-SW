@@ -15,3 +15,16 @@
   background-image: url("mole.jpg");
   background-size: cover;
 }
+
+.bonus-mole {
+  background-image: url("bonousMole.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.displayInfo-Container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 500px;
+}
